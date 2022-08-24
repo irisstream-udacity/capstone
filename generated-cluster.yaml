@@ -11,3 +11,5 @@ managedNodeGroups:
   instanceType: t3.medium
   desiredCapacity: 2
   volumeSize: 20
+  ssh:
+    publicKeyName: udacity

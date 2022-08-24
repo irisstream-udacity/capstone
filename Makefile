@@ -1,0 +1,23 @@
+setup:
+	python3 -m venv ~/.capstone
+	. ~/.capstone/bin/activate
+
+setup-conda:
+	conda create -n capstone python=3.7 -y
+
+install:
+	# install dependencies
+	pip install --upgrade pip && \
+	pip install -r requirements.txt
+	# install hadolint
+	wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
+	chmod +x /bin/hadolint
+
+lint:
+	hadolint Dockerfile
+	pylint --disable=R,C,W1203,W1202 app.py
+
+build-docker:
+	docker build -t capstone .
+
+all: install lint

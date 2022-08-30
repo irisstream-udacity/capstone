@@ -45,6 +45,7 @@ jobs:
     steps:
       - checkout
       - docker/install-docker
+          version: v20.10.17
       - run:
           name: build docker image
           command: |

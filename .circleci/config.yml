@@ -38,37 +38,37 @@ jobs:
           command: |
             . venv/bin/activate
             make lint 
-  - build-image:
-      docker:
-        - image: amazon/aws-cli
-      
-      steps:
-        - checkout
-        - run:
-            name: build docker image
-            command: |
-              docker build -t {{ docker_image }}:${CIRCLE_WORKFLOW_ID:0:7} .
-        - run:
-            name: build & upload docker image
-            command: |
-              aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin {{ docker_repo }}
-              docker tag {{ docker_image }}:${CIRCLE_WORKFLOW_ID:0:7} {{ docker_repo }}/{{ docker_image }}:${CIRCLE_WORKFLOW_ID:0:7}
-              docker push {{ docker_repo }}/{{ docker_image }}:${CIRCLE_WORKFLOW_ID:0:7}
-              docker logout
-  - deploy:
-      docker:
-        - image: amazon/aws-cli
-      steps:
-        - checkout
-        - kubernetes/install:
-            kubectl-version: v1.24.4
-        - aws-eks/create-cluster:
-            config-file: generated-cluster.yaml
-        - run:
-            name: deploy to aws
-            command: |
-              aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin {{ docker_repo }}
-              kubectl run capstone-pod --image={{ docker_repo }}/{{ docker_image }}:${CIRCLE_WORKFLOW_ID:0:7} --port=5000
+  build-image:
+    docker:
+      - image: amazon/aws-cli
+    
+    steps:
+      - checkout
+      - run:
+          name: build docker image
+          command: |
+            docker build -t {{ docker_image }}:${CIRCLE_WORKFLOW_ID:0:7} .
+      - run:
+          name: build & upload docker image
+          command: |
+            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin {{ docker_repo }}
+            docker tag {{ docker_image }}:${CIRCLE_WORKFLOW_ID:0:7} {{ docker_repo }}/{{ docker_image }}:${CIRCLE_WORKFLOW_ID:0:7}
+            docker push {{ docker_repo }}/{{ docker_image }}:${CIRCLE_WORKFLOW_ID:0:7}
+            docker logout
+  deploy:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - kubernetes/install:
+          kubectl-version: v1.24.4
+      - aws-eks/create-cluster:
+          config-file: generated-cluster.yaml
+      - run:
+          name: deploy to aws
+          command: |
+            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin {{ docker_repo }}
+            kubectl run capstone-pod --image={{ docker_repo }}/{{ docker_image }}:${CIRCLE_WORKFLOW_ID:0:7} --port=5000
               
 workflows:
   build:

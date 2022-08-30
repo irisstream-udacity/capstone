@@ -3,6 +3,7 @@ version: 2.1
 orbs: 
   aws-eks: circleci/aws-eks@2.2.0
   kubernetes: circleci/kubernetes@1.3
+  docker: circleci/docker@2.1.3
 jobs:
   build:
     docker:
@@ -41,9 +42,11 @@ jobs:
   build-image:
     docker:
       - image: amazon/aws-cli
-    
     steps:
       - checkout
+      - docker/install-docker:
+          version: latest
+          install_dir: /usr/local/bin
       - run:
           name: build docker image
           command: |

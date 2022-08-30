@@ -44,9 +44,7 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - docker/install-docker:
-          version: latest
-          install_dir: /usr/local/bin
+      - docker/install-docker
       - run:
           name: build docker image
           command: |

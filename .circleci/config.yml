@@ -92,7 +92,7 @@ jobs:
               ([ $ATTEMPTS -eq 60 ] || [ $STATUS -ne 200 ] || [ "$VERSION" = "$CIRCLE_WORKFLOW_ID:0:7" ]) && break
               sleep 1
             done
-            if [ $STATUS -ne 200 ] || [ "$VERSION" != "$CIRCLE_WORKFLOW_ID:0:7" ]; then
+            if [ $STATUS -ne 200 ] || [ "$VERSION" != "${CIRCLE_WORKFLOW_ID:0:7}" ]; then
               echo "Service is not healthy"
               exit 1
             fi

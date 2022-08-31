@@ -79,8 +79,8 @@ jobs:
       - run:
           name: Instal dependencies
           command: |
-            apt update
-            apt install -y curl tar gzip zip
+            yum update
+            yum install -y curl tar gzip zip
       - kubernetes/install:
           kubectl-version: v1.24.4
       - aws-eks/create-cluster:

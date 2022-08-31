@@ -87,7 +87,7 @@ jobs:
               echo "Attempts ${ATTEMPS}: checking ..."
               STATUS=$(curl -s -o /dev/null -w "%{http_code}" $URL)
               VERSION=$(curl -s $URL | grep 'Version' | sed 's/Version: //')
-              ([ $ATTEMPS -eq 60 ] || [ $STATUS -ne 200 ] || [ $VERSION -eq $CIRCLE_WORKFLOW_ID:0:7 ]) && break
+              ([ $ATTEMPS -eq 60 ] || [ $STATUS -ne 200 ] || [ "$VERSION" -eq "$CIRCLE_WORKFLOW_ID:0:7" ]) && break
               sleep 1
             done
             if [ $STATUS -ne 200 ] || [ $VERSION -ne $CIRCLE_WORKFLOW_ID:0:7 ]; then

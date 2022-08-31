@@ -1,6 +1,6 @@
 FROM python:3.7.3-stretch
 
-ARG version
+ARG version=local
 
 ENV VERSION ${version}
 

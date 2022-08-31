@@ -9,7 +9,7 @@ app = Flask(__name__)
 @app.route('/')
 def hello():
     name = request.args.get("name", "World")
-    return f'Hello {escape(name)}! \n Version: {version}'
+    return f'Hello {escape(name)}! \nVersion: {version}'
 
 if __name__ == '__main__':
     app.debug = True

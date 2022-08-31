@@ -78,7 +78,15 @@ jobs:
           name: health check
           command: |
             URL=http://$(kubectl get svc/capstone-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" $URL)
+            echo 'URL=$URL'
+            STATUS=0
+            while true; do
+              echo "checking ..."
+              STATUS=$(curl -s -o /dev/null -w "%{http_code}" $URL)
+              VERSION=$(curl -s $URL | grep 'Version' | sed 's/Version: //')
+              ([ $STATUS -ne 200 ] || [ $VERSION -eq $CIRCLE_WORKFLOW_ID:0:7]) && break
+              sleep 1
+            done
             if [ $STATUS -ne 200 ]; then
               echo "Service is not healthy"
               exit 1

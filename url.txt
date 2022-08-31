@@ -1,1 +1,2 @@
-a8f2eeed882cd44cf9bbc7f8d62ac55e-2031710356.us-east-1.elb.amazonaws.com
+github: https://github.com/irisstream-udacity/capstone
+web: a8f2eeed882cd44cf9bbc7f8d62ac55e-2031710356.us-east-1.elb.amazonaws.com

@@ -85,7 +85,7 @@ jobs:
             fi
       - run:
           name: roolback
-          when: failure
+          when: on_fail
           command: |
             kubectl rollout undo deployment/capstone
 workflows:

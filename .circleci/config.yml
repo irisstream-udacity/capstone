@@ -74,7 +74,7 @@ jobs:
       - run:
           name: health check
           command: |
-            status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5000)
+            status=$(curl -s -o /dev/null -w "%{http_code}" localhost:5000)
             echo $status
             if [ $status -ne 200 ]; then
               echo "Health check failed"

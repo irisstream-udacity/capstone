@@ -81,10 +81,16 @@ jobs:
           command: |
             yum update
             yum install -y curl tar gzip zip
+            # install docker
+            curl -fsSL https://get.docker.com -o get-docker.sh
+            sh get-docker.sh
       - kubernetes/install:
           kubectl-version: v1.24.4
-      - aws-eks/create-cluster:
-          config-file: generated-cluster.yaml
+      # - aws-eks/create-cluster:
+      #     config-file: generated-cluster.yaml
+      - setup_remote_docker:
+          version: 20.10.14
+          docker_layer_caching: true
       - run:
           name: deploy to aws
           command: |

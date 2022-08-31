@@ -76,6 +76,11 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
+      - run:
+          name: Instal dependencies
+          command: |
+            apt update
+            apt install -y curl tar gzip zip
       - kubernetes/install:
           kubectl-version: v1.24.4
       - aws-eks/create-cluster:
@@ -96,6 +101,6 @@ workflows:
           filters:
             branches:
               only: [main]
-      # - deploy: 
-      #     requires:
-      #       - build-image
+      - deploy: 
+          requires:
+            - build-image

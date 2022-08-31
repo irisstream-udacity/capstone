@@ -53,6 +53,9 @@ jobs:
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
             ./aws/install
+            # install docker
+            curl -fsSL https://get.docker.com -o get-docker.sh
+            sh get-docker.sh
       - setup_remote_docker:
           version: 20.10.14
           docker_layer_caching: true

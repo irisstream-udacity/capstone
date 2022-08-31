@@ -1,13 +1,15 @@
 # save this as app.py
 from flask import Flask, request
 from markupsafe import escape
+import os
 
+version = os.environ['CIRCLECI_WORKFLOW_ID'][0:7]
 app = Flask(__name__)
 
 @app.route('/')
 def hello():
     name = request.args.get("name", "World")
-    return f'Hello, {escape(name)}!'
+    return f'Hello {escape(name)}! \n Version: {version}'
 
 if __name__ == '__main__':
     app.debug = True

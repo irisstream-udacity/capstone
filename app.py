@@ -3,7 +3,7 @@ from flask import Flask, request
 from markupsafe import escape
 import os
 
-version = os.environ['CIRCLECI_WORKFLOW_ID'][0:7]
+version = os.environ['VERSION']
 app = Flask(__name__)
 
 @app.route('/')

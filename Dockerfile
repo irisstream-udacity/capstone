@@ -1,5 +1,9 @@
 FROM python:3.7.3-stretch
 
+ARG version
+
+ENV VERSION ${version}
+
 ## Step 1:
 # Create a working directory
 WORKDIR /app

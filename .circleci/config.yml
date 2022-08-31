@@ -58,6 +58,24 @@ jobs:
             docker tag $docker_image:${CIRCLE_WORKFLOW_ID:0:7} $docker_repo/$docker_image:${CIRCLE_WORKFLOW_ID:0:7}
             docker push $docker_repo/$docker_image:${CIRCLE_WORKFLOW_ID:0:7}
             docker logout
+  smoke-test:
+    docker:
+      - image: irisstream/capstone-image
+    steps:
+      - checkout
+      - run:
+          name: run docker image
+          command: |
+            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${docker_repo}
+            docker run -p 5000:5000 ${docker_repo}/${docker_image}:${CIRCLE_WORKFLOW_ID:0:7}
+      - run:
+          name: health check
+          command: |
+            curl -s -o /dev/null -w "%{http_code}" http://localhost:5000
+            if [ $? -ne 200 ]; then
+              echo "Health check failed"
+              exit 1
+            fi
   deploy:
     docker:
       - image: irisstream/capstone-image
@@ -87,8 +105,6 @@ jobs:
               echo "Attempts ${ATTEMPTS}: checking ..."
               STATUS=$(curl -s -o /dev/null -w "%{http_code}" $URL)
               VERSION=$(curl -s $URL | grep 'Version' | sed 's/Version: //')
-              echo "Status: $STATUS"
-              echo "Version: $VERSION"
               ([ $ATTEMPTS -eq 60 ] || [ $STATUS -ne 200 ] || [ "$VERSION" = "${CIRCLE_WORKFLOW_ID:0:7}" ]) && break
               sleep 1
             done
@@ -111,6 +127,9 @@ workflows:
           filters:
             branches:
               only: [main]
-      - deploy: 
+      - smoke-test:
           requires:
             - build-image
+      - deploy: 
+          requires:
+            - smoke-test

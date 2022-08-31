@@ -70,7 +70,7 @@ jobs:
           name: run docker image
           command: |
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${docker_repo}
-            docker run -p 5000:5000 ${docker_repo}/${docker_image}:${CIRCLE_WORKFLOW_ID:0:7}
+            docker run -p 5000:5000 -d ${docker_repo}/${docker_image}:${CIRCLE_WORKFLOW_ID:0:7}
       - run:
           name: health check
           command: |

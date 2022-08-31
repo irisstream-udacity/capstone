@@ -109,7 +109,7 @@ jobs:
           name: health check
           command: |
             URL=http://$(kubectl get svc/capstone-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
-            echo 'URL=${URL}'
+            echo "URL=${URL}"
             STATUS=0
             ATTEMPTS=0
             VERSION=whateveryouwant

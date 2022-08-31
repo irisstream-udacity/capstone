@@ -85,6 +85,8 @@ jobs:
             while true; do
               ATTEMPTS=$((ATTEMPTS+1))
               echo "Attempts ${ATTEMPTS}: checking ..."
+              echo "Status: $STATUS"
+              echo "Version: $VERSION"
               STATUS=$(curl -s -o /dev/null -w "%{http_code}" $URL)
               VERSION=$(curl -s $URL | grep 'Version' | sed 's/ Version: //')
               ([ $ATTEMPTS -eq 60 ] || [ $STATUS -ne 200 ] || [ "$VERSION" = "$CIRCLE_WORKFLOW_ID:0:7" ]) && break

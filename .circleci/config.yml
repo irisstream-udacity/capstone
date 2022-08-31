@@ -110,6 +110,7 @@ jobs:
           command: |
             URL=http://$(kubectl get svc/capstone-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
             echo "URL=${URL}"
+            echo "New version: ${CIRCLE_WORKFLOW_ID:0:7}"
             kubectl rollout status deployment/capstone
 
             STATUS=$(curl -s -o /dev/null -w "%{http_code}" $URL)

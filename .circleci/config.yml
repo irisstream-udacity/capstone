@@ -74,6 +74,9 @@ jobs:
             aws eks --region us-east-1 update-kubeconfig --name my-cluster
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${docker_repo}
             kubectl run capstone-pod --image=${docker_repo}/${docker_image}:${CIRCLE_WORKFLOW_ID:0:7}
+            while [[ $(kubectl get pods capstone-pod -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do 
+              echo "waiting for pod" && sleep 1; 
+            done
             kubectl port-forward capstone-pod 5000:5000 & (sleep 5 && curl -s -o /dev/null -w "%{http_code}" http://localhost:5000 > health_check)
             status=$(cat health_check)
             echo $status

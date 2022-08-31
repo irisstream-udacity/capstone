@@ -73,14 +73,18 @@ jobs:
             docker logout
   deploy:
     docker:
-      - image: amazon/aws-cli
+      - image: ubuntu
     steps:
       - checkout
       - run:
-          name: Instal dependencies
+          name: install dependencies
           command: |
-            yum update
-            yum install -y curl tar gzip zip
+            apt update
+            apt install -y curl zip
+            # install awscli
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            ./aws/install
             # install docker
             curl -fsSL https://get.docker.com -o get-docker.sh
             sh get-docker.sh

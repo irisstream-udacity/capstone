@@ -63,6 +63,9 @@ jobs:
       - image: irisstream/capstone-image
     steps:
       - checkout
+      - setup_remote_docker:
+          version: 20.10.14
+          docker_layer_caching: true
       - run:
           name: run docker image
           command: |
